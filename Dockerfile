@@ -22,14 +22,16 @@ COPY . .
 # Compilar la aplicación para producción
 RUN npm run build --prod
 
-# Etapa 2: Servidor para producción
-FROM nginx:stable-alpine
+# Etapa 2: Producción
+FROM node:18-alpine
 
-# Copiar los archivos de build al servidor NGINX
-COPY --from=builder /usr/src/app/dist/ /usr/share/nginx/html
+# Establecer el directorio de trabajo dentro del contenedor
+RUN npm install -g serve
 
-# Exponer el puerto que usará NGINX
+COPY --from=builder /usr/src/app/dist /usr/src/app/dist
+
+WORKDIR /usr/src/app
+
 EXPOSE 80
 
-# Comando por defecto para iniciar NGINX
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "serve", "-s", "dist", "-l", "80" ]
