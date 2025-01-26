@@ -1,5 +1,5 @@
 # Etapa 1: Construcción
-FROM node:16-alpine AS builder
+FROM node:18-alpine
 
 # Instalar dependencias del sistema operativo necesarias para compilación
 RUN apk add --no-cache python3 make g++
