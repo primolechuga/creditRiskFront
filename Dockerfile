@@ -26,7 +26,7 @@ RUN npm run build --prod
 FROM nginx:stable-alpine
 
 # Copiar los archivos de build al servidor NGINX
-COPY --from=builder /usr/src/app/dist/tu-nombre-app /usr/share/nginx/html
+COPY --from=builder /usr/src/app/dist/ /usr/share/nginx/html
 
 # Exponer el puerto que usará NGINX
 EXPOSE 80
