@@ -17,13 +17,13 @@ RUN npm install -g @angular/cli
 COPY . .
 
 # Compilar la aplicación para producción
-RUN npm run build --configuration production
+RUN npm run build --prod
 
 # Etapa 2: Producción
 FROM node:18-alpine
 
-# Instalar http-server
-RUN npm install -g http-server
+# Instalar serve
+RUN npm install -g serve
 
 # Copiar los archivos compilados desde la etapa de construcción
 COPY --from=builder /usr/src/app/dist /usr/src/app/dist
@@ -35,4 +35,4 @@ WORKDIR /usr/src/app
 EXPOSE 80
 
 # Comando por defecto para servir la aplicación
-CMD ["http-server", "dist", "-p", "80"]
+CMD ["serve", "-s", "dist/resizable_sidenav/browser", "-l", "80"]
