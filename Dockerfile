@@ -1,23 +1,35 @@
+# Etapa 1: Construcción
+FROM node:16-alpine AS builder
 
-# Stage 1: Build the application
-FROM node:14-alpine AS build
+# Instalar dependencias del sistema operativo necesarias para compilación
+RUN apk add --no-cache python3 make g++
 
+# Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app
 
+# Copiar solo los archivos necesarios para instalar dependencias
 COPY package*.json ./
-RUN npm install -g @angular/cli
+
+# Instalar dependencias
 RUN npm install
 
+# Instalar Angular CLI (especificar versión si es necesario)
+RUN npm install -g @angular/cli
+
+# Copiar el resto del código fuente
 COPY . .
-RUN npm run build
 
-# Stage 2: Serve the application
-FROM node:14-alpine
+# Compilar la aplicación para producción
+RUN npm run build --prod
 
-WORKDIR /usr/src/app
+# Etapa 2: Servidor para producción
+FROM nginx:stable-alpine
 
-COPY --from=build /usr/src/app/dist ./dist
+# Copiar los archivos de build al servidor NGINX
+COPY --from=builder /usr/src/app/dist/tu-nombre-app /usr/share/nginx/html
 
-EXPOSE 4000
+# Exponer el puerto que usará NGINX
+EXPOSE 80
 
-CMD ["npx", "http-server", "dist"]
+# Comando por defecto para iniciar NGINX
+CMD ["nginx", "-g", "daemon off;"]
