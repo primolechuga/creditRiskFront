@@ -7,22 +7,26 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class LoanService {
   // Variables observables para cada clave del JSON
-  private pagadoSubject = new BehaviorSubject<any>(null);
-  private en_procesoSubject = new BehaviorSubject<any>(null);
-  private incumplidoSubject = new BehaviorSubject<any>(null);
+  private pagadosSubject = new BehaviorSubject<any>(null);
+  private activosSubject = new BehaviorSubject<any>(null);
+  private incumplidosSubject = new BehaviorSubject<any>(null);
+  private morososSubject = new BehaviorSubject<any>(null);
+  private emitidosSubject = new BehaviorSubject<any>(null);
   private scoreSubject = new BehaviorSubject<any>(null);
 
   // Exponiendo como observables
-  pagado$ = this.pagadoSubject.asObservable();
-  en_proceso$ = this.en_procesoSubject.asObservable();
-  incumplido$ = this.incumplidoSubject.asObservable();
+  pagados$ = this.pagadosSubject.asObservable();
+  activos$ = this.activosSubject.asObservable();
+  incumplidos$ = this.incumplidosSubject.asObservable();
+  morosos$ = this.morososSubject.asObservable();
+  emitidos$ = this.emitidosSubject.asObservable();
   score$ = this.scoreSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
   // Método para enviar datos al endpoint y actualizar las variables observables
   submitLoanData(loanData: any) {
-    let endpoint = process.env['BACK_URL'] || 'http://127.0.0.1:4321' // Cambia esta URL por el endpoint real
+    let endpoint = 'http://127.0.0.1:4321'; // Cambia esta URL por el endpoint real
     endpoint += '/api/get-score';
 
     this.http.post<any>(endpoint, loanData).subscribe({
@@ -33,24 +37,30 @@ export class LoanService {
 
         console.log(jsonResponse);
         // Actualiza las variables observables con las claves del JSON recibido
-        this.pagadoSubject.next(jsonResponse.pagado);
-        this.en_procesoSubject.next(jsonResponse.en_proceso);
-        this.incumplidoSubject.next(jsonResponse.incumplido);
+        this.pagadosSubject.next(jsonResponse.Pagados);
+        this.activosSubject.next(jsonResponse.Activos);
+        this.incumplidosSubject.next(jsonResponse.Incumplidos);
+        this.morososSubject.next(jsonResponse.Morosos);
+        this.emitidosSubject.next(jsonResponse.Emitidos);
         this.scoreSubject.next(jsonResponse.score);
 
         // Console logs para verificar las actualizaciones
-        console.log('pagado actualizado:', jsonResponse.pagado);
-        console.log('en_proceso actualizado:', jsonResponse.en_proceso);
-        console.log('incumplido actualizado:', jsonResponse.incumplido);
+        console.log('pagados actualizado:', jsonResponse.Pagados);
+        console.log('activos actualizado:', jsonResponse.Activos);
+        console.log('incumplidos actualizado:', jsonResponse.Incumplidos);
+        console.log('morosos actualizado:', jsonResponse.Morosos);
+        console.log('emitidos actualizado:', jsonResponse.Emitidos);
         console.log('score actualizado:', jsonResponse.score);
       },
 
       error: (error) => {
         console.error('Error al enviar datos del préstamo:', error);
         // En caso de error, resetea los valores de las variables observables
-        this.pagadoSubject.next(null);
-        this.en_procesoSubject.next(null);
-        this.incumplidoSubject.next(null);
+        this.pagadosSubject.next(null);
+        this.activosSubject.next(null);
+        this.incumplidosSubject.next(null);
+        this.morososSubject.next(null);
+        this.emitidosSubject.next(null);
         this.scoreSubject.next(null);
       },
     });

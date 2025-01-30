@@ -14,11 +14,10 @@ import { Subscription } from 'rxjs';
 })
 export class ScoreCardComponent implements OnInit {
   pieChartData = {
-    labels: ['Current', 'Fully Paid', 'Failure'],
+    labels: ['Current', 'Fully Paid', 'Failure', 'Defaulter', 'Issued'],
     datasets: [
       {
-        data: [64.04, 23.41, 12.55], // Ejemplo de datos
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        data: [68.52, 23.63, 5.32, 1.57, 0.95], // Ejemplo de datos
       },
     ],
   };
@@ -32,9 +31,11 @@ export class ScoreCardComponent implements OnInit {
     },
   };
 
-  paid: number = 0;
-  current: number = 0;
   failure: number = 0;
+  current: number = 0;
+  paid: number = 0;
+  defaulter: number = 0;
+  issued: number = 0;
   score: number = 0;
 
   private subscriptions: Subscription[] = [];
@@ -43,14 +44,20 @@ export class ScoreCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.loanService.pagado$.subscribe(
+      this.loanService.pagados$.subscribe(
         (data) => (this.paid = data * 100 || 0)
       ),
-      this.loanService.en_proceso$.subscribe(
+      this.loanService.activos$.subscribe(
         (data) => (this.current = data * 100 || 0)
       ),
-      this.loanService.incumplido$.subscribe(
+      this.loanService.incumplidos$.subscribe(
         (data) => (this.failure = data * 100 || 0)
+      ),
+      this.loanService.morosos$.subscribe(
+        (data) => (this.defaulter = data * 100 || 0)
+      ),
+      this.loanService.emitidos$.subscribe(
+        (data) => (this.issued = data * 100 || 0)
       ),
       this.loanService.score$.subscribe((data) => (this.score = data || 0))
     );

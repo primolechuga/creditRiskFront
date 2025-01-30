@@ -26,8 +26,14 @@
       <h3>Paying The Quotes In Time</h3>
       <p-progressBar [value]="current" [showValue]="true"></p-progressBar>
 
+      <h3>Paying The Quotes Out Of Time (+1 Month)</h3>
+      <p-progressBar [value]="defaulter" [showValue]="true"></p-progressBar>
+
       <h3>Failure</h3>
       <p-progressBar [value]="failure" [showValue]="true"></p-progressBar>
+
+      <h3>Credit Approved</h3>
+      <p-progressBar [value]="issued" [showValue]="true"></p-progressBar>
     </div>
     <br />
 
