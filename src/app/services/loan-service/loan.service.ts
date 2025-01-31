@@ -26,7 +26,7 @@ export class LoanService {
 
   // Método para enviar datos al endpoint y actualizar las variables observables
   submitLoanData(loanData: any) {
-    let endpoint = process.env['BACK_URL'] || 'http://127.0.0.1:4321' ;
+    let endpoint = 'https://creditrisk.onrender.com' ;
     endpoint += '/api/get-score';
 
     this.http.post<any>(endpoint, loanData).subscribe({
