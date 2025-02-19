@@ -31,7 +31,14 @@ h1 {
 }
 
 p {
-  font-size: 10pt;
+  font-size: 12pt;
+  margin: 0px;
+  margin-bottom: 5px;
+}
+
+.field-description {
+  font-size: 12pt;
+  color: crimson;
 }
 
 form {
@@ -50,6 +57,22 @@ form {
 
 input {
   height: 40px;
+  margin-bottom: 20px;
+  border-color: #d1d5db;
+  box-shadow: none;
+
+  &:focus,
+  &:hover {
+    border-color: crimson;
+    outline: none;
+    box-shadow: 0 0 5px rgba(220, 20, 60, 0.5);
+  }
+
+  &::placeholder {
+    color: #c0c0c0;
+    font-weight: 100;
+    opacity: 1;
+  }
 }
 
 .p-field {
@@ -58,11 +81,49 @@ input {
 }
 
 label {
-  font-size: 12pt;
+  font-size: 14pt;
   color: black;
+  font-weight: bold;
 }
 
 .required-field {
   color: red;
   font-size: 10pt;
+}
+
+.bibliographic-section {
+  margin: 50px;
+  padding: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: black;
+    font-weight: bold;
+    border-bottom: 2px solid black;
+    padding-bottom: 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 0.8rem;
+
+      a {
+        color: crimson;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: darkred;
+        }
+      }
+    }
+  }
 }

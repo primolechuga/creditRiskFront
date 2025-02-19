@@ -8,10 +8,21 @@
   </div>
 
   <div>
+    <p
+      class="field-description"
+      style="padding-left: 60px; padding-right: 60px"
+    >
+      Please fill out the form below with accurate financial details. Enter
+      numerical values without commas or symbols. Required fields must be
+      completed to proceed. Ensure all amounts are in USD and use a period (.)
+      for decimal values. Once all fields are filled, click 'Submit' to
+      calculate your credit risk score
+    </p>
     <form #loanForm="ngForm" (ngSubmit)="onSubmit(loanForm)" novalidate>
       <div *ngFor="let field of loanFields">
         <div class="p-field">
           <label [for]="field.key">{{ field.label }}</label>
+          <p class="field-description">{{ field.description }}</p>
           <input
             pInputText
             [id]="field.key"
@@ -20,6 +31,7 @@
             [name]="field.key"
             required
             #loanInput="ngModel"
+            [placeholder]="field.defaultValue"
           />
         </div>
       </div>
@@ -34,5 +46,22 @@
 
   <div>
     <app-score-card></app-score-card>
+  </div>
+
+  <div class="bibliographic-section">
+    <h2>Bibliography</h2>
+    <ul>
+      <li>
+        <a
+          href="https://full-antlion-795.notion.site/Calculadora-De-Riesgo-Crediticio-18181ab4922b80c086aae70cbc8260c3?pvs=74"
+          target="_blank"
+        >
+          Technical Report
+        </a>
+      </li>
+      <li>
+        <a href="#" target="_blank"> Promotional Video </a>
+      </li>
+    </ul>
   </div>
 </div>
