@@ -30,128 +30,136 @@ import { ScoreCardComponent } from '../scorecard/scorecard.component';
 export class LoanFormComponent {
   loanFields = [
     {
-      key: 'out_prncp',
-      label: 'Outstanding Principal',
-      description: 'Remaining balance of the loan that has not yet been paid.',
-      defaultValue: 0.0,
-    },
-    {
-      key: 'out_prncp_inv',
-      label: 'Outstanding Principal Invested',
-      description: 'Portion of the outstanding balance funded by investors.',
-      defaultValue: 0.0,
-    },
-    {
-      key: 'last_pymnt_amnt',
-      label: 'Last Payment Amount',
-      description: 'Amount of the last payment made by the borrower.',
-      defaultValue: 171.62,
-    },
-    {
-      key: 'total_rec_prncp',
-      label: 'Total Received Principal',
-      description: 'Total principal amount that has been repaid.',
-      defaultValue: 5000.0,
-    },
-    {
-      key: 'total_pymnt',
-      label: 'Total Payment',
-      description:
-        'Total sum of all payments made, including principal and interest.',
-      defaultValue: 5861.07141425,
-    },
-    {
-      key: 'total_pymnt_inv',
-      label: 'Total Payment Invested',
-      description: 'Total payments received distributed to investors.',
-      defaultValue: 5831.78,
-    },
-    {
-      key: 'recoveries',
-      label: 'Recoveries',
-      description: 'Amount recovered from defaulted loans.',
-      defaultValue: 0.0,
-    },
-    {
-      key: 'collection_recovery_fee',
-      label: 'Collection Recovery Fee',
-      description: 'Fee charged for recovering delinquent debt.',
-      defaultValue: 0.0,
-    },
-    {
-      key: 'funded_amnt',
-      label: 'Funded Amount',
-      description: 'Total amount of the loan that was funded.',
-      defaultValue: 5000.0,
-    },
-    {
-      key: 'total_rec_int',
-      label: 'Total Received Interest',
-      description: 'Total interest received from the borrower.',
-      defaultValue: 861.07,
-    },
-    {
-      key: 'funded_amnt_inv',
-      label: 'Funded Amount Invested',
-      description: 'Amount funded directly by investors.',
-      defaultValue: 4975.0,
-    },
-    {
-      key: 'loan_amnt',
-      label: 'Loan Amount',
-      description: 'Original loan amount granted.',
-      defaultValue: 5000.0,
-    },
-    {
-      key: 'installment',
-      label: 'Installment',
-      description: 'Fixed monthly payment for the loan.',
-      defaultValue: 162.87,
-    },
-    {
       key: 'total_rev_hi_lim',
       label: 'Total Revolving High Limit',
-      description: 'Highest historical credit limit on revolving accounts.',
-      defaultValue: 0,
+      description: 'Total revolving high credit/credit limit.',
+      defaultValue: 10000,
     },
     {
       key: 'tot_cur_bal',
       label: 'Total Current Balance',
-      description:
-        "Sum of all current balances across the borrower's accounts.",
-      defaultValue: 0,
-    },
-    {
-      key: 'initial_list_status_w',
-      label: 'Initial List Status W',
-      description:
-        'Initial listing status of the loan (indicates if it was listed on a secondary market).',
-      defaultValue: 0,
-    },
-    {
-      key: 'int_rate',
-      label: 'Interest Rate',
-      description: 'Interest rate applied to the loan.',
-      defaultValue: 10.65,
+      description: 'Total current balance of all accounts.',
+      defaultValue: 100000,
     },
     {
       key: 'dti',
       label: 'Debt-to-Income Ratio',
-      description: 'Percentage of income used for debt payments.',
-      defaultValue: 27.65,
+      description: 'A unique LC assigned ID for the loan listing.',
+      defaultValue: 19,
     },
     {
       key: 'revol_bal',
       label: 'Revolving Balance',
-      description: 'Outstanding balance on revolving credit accounts.',
-      defaultValue: 13648.0,
+      description: 'Total credit revolving balance.',
+      defaultValue: 0,
     },
     {
-      key: 'revol_util',
-      label: 'Revolving Utilization',
+      key: 'months_until_2025',
+      label: 'Months Until 2025',
       description:
-        'Percentage of revolving credit utilized compared to the available limit.',
-      defaultValue: 83.7,
+        "The month the borrower's earliest reported credit line was opened.",
+      defaultValue: 3,
+    },
+    {
+      key: 'annual_inc',
+      label: 'Annual Income',
+      description:
+        'The self-reported annual income provided by the borrower during registration.',
+      defaultValue: 90,
+    },
+    {
+      key: 'total_acc',
+      label: 'Total Accounts',
+      description:
+        "The total number of credit lines currently in the borrower's credit file.",
+      defaultValue: 12,
+    },
+    {
+      key: 'open_acc',
+      label: 'Open Accounts',
+      description:
+        "The total number of credit lines currently in the borrower's credit file.",
+      defaultValue: 5,
+    },
+    {
+      key: 'mths_since_last_delinq',
+      label: 'Months Since Last Delinquency',
+      description:
+        "The number of months since the borrower's last delinquency.",
+      defaultValue: 4,
+    },
+    {
+      key: 'emp_length',
+      label: 'Employment Length',
+      description:
+        'Employment length in years. Possible values are between 0 and 10 where 0 means less than one year and 10 means ten or more years.',
+      defaultValue: 10,
+    },
+    {
+      key: 'mths_since_last_major_derog',
+      label: 'Months Since Last Major Derogatory',
+      description: 'Months since most recent 90-day or worse rating.',
+      defaultValue: 62,
+    },
+    {
+      key: 'inq_last_6mths',
+      label: 'Inquiries in Last 6 Months',
+      description: 'Number of open trades in last 6 months.',
+      defaultValue: 1,
+    },
+    {
+      key: 'mths_since_last_record',
+      label: 'Months Since Last Public Record',
+      description: 'The number of months since the last public record.',
+      defaultValue: 60,
+    },
+    {
+      key: 'delinq_2yrs',
+      label: 'Delinquencies in Last 2 Years',
+      description:
+        "The number of 30+ days past-due incidences of delinquency in the borrower's credit file for the past 2 years.",
+      defaultValue: 0,
+    },
+    {
+      key: 'pub_rec',
+      label: 'Public Records',
+      description: 'Number of derogatory public records.',
+      defaultValue: 0,
+    },
+    {
+      key: 'verification_status',
+      label: 'Verification Status',
+      description:
+        "Verification status of the borrower: 'Not Verified' (0), 'Source Verified' (1), 'Verified' (2).",
+      defaultValue: 2,
+    },
+    {
+      key: 'home_ownership_MORTGAGE',
+      label: 'Home Ownership MORTGAGE',
+      description:
+        'Indicates if the borrower has MORTGAGE as their home ownership status.',
+      defaultValue: 1,
+    },
+    {
+      key: 'home_ownership_RENT',
+      label: 'Home Ownership RENT',
+      description:
+        'Indicates if the borrower has RENT as their home ownership status.',
+      defaultValue: 0,
+    },
+    {
+      key: 'purpose_credit_card',
+      label: 'Purpose Credit Card',
+      description:
+        'A category provided by the borrower for the loan request indicating credit card.',
+      defaultValue: 1,
+    },
+    {
+      key: 'purpose_debt_consolidation',
+      label: 'Purpose Debt Consolidation',
+      description:
+        'A category provided by the borrower for the loan request indicating debt consolidation.',
+      defaultValue: 0,
     },
   ];
 

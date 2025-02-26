@@ -6,62 +6,138 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class LoanService {
-  // Variables observables para cada clave del JSON
-  private pagadosSubject = new BehaviorSubject<any>(null);
-  private activosSubject = new BehaviorSubject<any>(null);
-  private incumplidosSubject = new BehaviorSubject<any>(null);
-  private morososSubject = new BehaviorSubject<any>(null);
-  private emitidosSubject = new BehaviorSubject<any>(null);
+  // Variables observables para los datos principales
   private scoreSubject = new BehaviorSubject<any>(null);
+  private riskCategorySubject = new BehaviorSubject<any>(null);
+  private mostLikelyClassSubject = new BehaviorSubject<any>(null);
 
-  // Exponiendo como observables
-  pagados$ = this.pagadosSubject.asObservable();
-  activos$ = this.activosSubject.asObservable();
-  incumplidos$ = this.incumplidosSubject.asObservable();
-  morosos$ = this.morososSubject.asObservable();
-  emitidos$ = this.emitidosSubject.asObservable();
+  // Variables observables para cada probabilidad individual
+  private probabilityCurrentSubject = new BehaviorSubject<number | null>(null);
+  private probabilityFullyPaidSubject = new BehaviorSubject<number | null>(
+    null
+  );
+  private probabilityChargedOffSubject = new BehaviorSubject<number | null>(
+    null
+  );
+  private probabilityLate31_120Subject = new BehaviorSubject<number | null>(
+    null
+  );
+  private probabilityInGracePeriodSubject = new BehaviorSubject<number | null>(
+    null
+  );
+  private probabilityLate16_30Subject = new BehaviorSubject<number | null>(
+    null
+  );
+  private probabilityIssuedSubject = new BehaviorSubject<number | null>(null);
+  private probabilityDefaultSubject = new BehaviorSubject<number | null>(null);
+  private probabilityCreditPolicyFullyPaidSubject = new BehaviorSubject<
+    number | null
+  >(null);
+  private probabilityCreditPolicyChargedOffSubject = new BehaviorSubject<
+    number | null
+  >(null);
+
+  // Exponiendo los observables
   score$ = this.scoreSubject.asObservable();
+  riskCategory$ = this.riskCategorySubject.asObservable();
+  mostLikelyClass$ = this.mostLikelyClassSubject.asObservable();
+  probabilityCurrent$ = this.probabilityCurrentSubject.asObservable();
+  probabilityFullyPaid$ = this.probabilityFullyPaidSubject.asObservable();
+  probabilityChargedOff$ = this.probabilityChargedOffSubject.asObservable();
+  probabilityLate31_120$ = this.probabilityLate31_120Subject.asObservable();
+  probabilityInGracePeriod$ =
+    this.probabilityInGracePeriodSubject.asObservable();
+  probabilityLate16_30$ = this.probabilityLate16_30Subject.asObservable();
+  probabilityIssued$ = this.probabilityIssuedSubject.asObservable();
+  probabilityDefault$ = this.probabilityDefaultSubject.asObservable();
+  probabilityCreditPolicyFullyPaid$ =
+    this.probabilityCreditPolicyFullyPaidSubject.asObservable();
+  probabilityCreditPolicyChargedOff$ =
+    this.probabilityCreditPolicyChargedOffSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
   // Método para enviar datos al endpoint y actualizar las variables observables
   submitLoanData(loanData: any) {
-    let endpoint = 'https://creditrisk.onrender.com' ;
-    endpoint += '/api/get-score';
+    const endpoint = 'https://creditrisk.onrender.com/api/get-score';
 
     this.http.post<any>(endpoint, loanData).subscribe({
       next: (response) => {
-        // Actualiza las variables observables con las claves del JSON recibido
-        let jsonResponse =
+        // Parseo de la respuesta en caso de ser una cadena JSON
+        const jsonResponse =
           typeof response === 'string' ? JSON.parse(response) : response;
-
         console.log(jsonResponse);
-        // Actualiza las variables observables con las claves del JSON recibido
-        this.pagadosSubject.next(jsonResponse.Pagados);
-        this.activosSubject.next(jsonResponse.Activos);
-        this.incumplidosSubject.next(jsonResponse.Incumplidos);
-        this.morososSubject.next(jsonResponse.Morosos);
-        this.emitidosSubject.next(jsonResponse.Emitidos);
+
+        // Actualización de las variables principales
         this.scoreSubject.next(jsonResponse.score);
+        this.riskCategorySubject.next(jsonResponse.risk_category);
+        this.mostLikelyClassSubject.next(jsonResponse.most_likely_class);
 
-        // Console logs para verificar las actualizaciones
-        console.log('pagados actualizado:', jsonResponse.Pagados);
-        console.log('activos actualizado:', jsonResponse.Activos);
-        console.log('incumplidos actualizado:', jsonResponse.Incumplidos);
-        console.log('morosos actualizado:', jsonResponse.Morosos);
-        console.log('emitidos actualizado:', jsonResponse.Emitidos);
+        // Descomposición del subarreglo "probabilities" en variables individuales
+        const probabilities = jsonResponse.probabilities;
+        this.probabilityCurrentSubject.next(probabilities['Current']);
+        this.probabilityFullyPaidSubject.next(probabilities['Fully Paid']);
+        this.probabilityChargedOffSubject.next(probabilities['Charged Off']);
+        this.probabilityLate31_120Subject.next(probabilities['Late (31-120)']);
+        this.probabilityInGracePeriodSubject.next(
+          probabilities['In Grace Period']
+        );
+        this.probabilityLate16_30Subject.next(probabilities['Late (16-30)']);
+        this.probabilityIssuedSubject.next(probabilities['Issued']);
+        this.probabilityDefaultSubject.next(probabilities['Default']);
+        this.probabilityCreditPolicyFullyPaidSubject.next(
+          probabilities['Does not meet the credit policy. Status: Fully Paid']
+        );
+        this.probabilityCreditPolicyChargedOffSubject.next(
+          probabilities['Does not meet the credit policy. Status: Charged Off']
+        );
+
+        // Logs para verificar la actualización
         console.log('score actualizado:', jsonResponse.score);
+        console.log('risk_category actualizado:', jsonResponse.risk_category);
+        console.log(
+          'most_likely_class actualizado:',
+          jsonResponse.most_likely_class
+        );
+        console.log('Current actualizado:', probabilities['Current']);
+        console.log('Fully Paid actualizado:', probabilities['Fully Paid']);
+        console.log('Charged Off actualizado:', probabilities['Charged Off']);
+        console.log(
+          'Late (31-120) actualizado:',
+          probabilities['Late (31-120)']
+        );
+        console.log(
+          'In Grace Period actualizado:',
+          probabilities['In Grace Period']
+        );
+        console.log('Late (16-30) actualizado:', probabilities['Late (16-30)']);
+        console.log('Issued actualizado:', probabilities['Issued']);
+        console.log('Default actualizado:', probabilities['Default']);
+        console.log(
+          'Does not meet the credit policy. Status: Fully Paid actualizado:',
+          probabilities['Does not meet the credit policy. Status: Fully Paid']
+        );
+        console.log(
+          'Does not meet the credit policy. Status: Charged Off actualizado:',
+          probabilities['Does not meet the credit policy. Status: Charged Off']
+        );
       },
-
       error: (error) => {
         console.error('Error al enviar datos del préstamo:', error);
-        // En caso de error, resetea los valores de las variables observables
-        this.pagadosSubject.next(null);
-        this.activosSubject.next(null);
-        this.incumplidosSubject.next(null);
-        this.morososSubject.next(null);
-        this.emitidosSubject.next(null);
+        // Resetea todas las variables en caso de error
         this.scoreSubject.next(null);
+        this.riskCategorySubject.next(null);
+        this.mostLikelyClassSubject.next(null);
+        this.probabilityCurrentSubject.next(null);
+        this.probabilityFullyPaidSubject.next(null);
+        this.probabilityChargedOffSubject.next(null);
+        this.probabilityLate31_120Subject.next(null);
+        this.probabilityInGracePeriodSubject.next(null);
+        this.probabilityLate16_30Subject.next(null);
+        this.probabilityIssuedSubject.next(null);
+        this.probabilityDefaultSubject.next(null);
+        this.probabilityCreditPolicyFullyPaidSubject.next(null);
+        this.probabilityCreditPolicyChargedOffSubject.next(null);
       },
     });
   }

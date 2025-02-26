@@ -9,6 +9,7 @@
       type="pie"
       [data]="pieChartData"
       [options]="pieChartOptions"
+      [style]="{ width: '500px' }"
     ></p-chart>
   </div>
 
@@ -20,20 +21,65 @@
     <br />
     <!-- Progress Bars for Paid, Current, Failure -->
     <div class="progress-bar-section">
-      <h3>Fully Paying The Loan</h3>
-      <p-progressBar [value]="paid" [showValue]="true"></p-progressBar>
+      <h3>Current</h3>
+      <p-progressBar
+        [value]="currentProbability"
+        [showValue]="true"
+      ></p-progressBar>
 
-      <h3>Paying The Quotes In Time</h3>
-      <p-progressBar [value]="current" [showValue]="true"></p-progressBar>
+      <h3>Fully Paid</h3>
+      <p-progressBar
+        [value]="fullyPaidProbability"
+        [showValue]="true"
+      ></p-progressBar>
 
-      <h3>Paying The Quotes Out Of Time (+1 Month)</h3>
-      <p-progressBar [value]="defaulter" [showValue]="true"></p-progressBar>
+      <h3>Charged Off</h3>
+      <p-progressBar
+        [value]="chargedOffProbability"
+        [showValue]="true"
+      ></p-progressBar>
 
-      <h3>Failure</h3>
-      <p-progressBar [value]="failure" [showValue]="true"></p-progressBar>
+      <h3>Late (31-120)</h3>
+      <p-progressBar
+        [value]="late31_120Probability"
+        [showValue]="true"
+      ></p-progressBar>
 
-      <h3>Credit Approved</h3>
-      <p-progressBar [value]="issued" [showValue]="true"></p-progressBar>
+      <h3>In Grace Period</h3>
+      <p-progressBar
+        [value]="inGracePeriodProbability"
+        [showValue]="true"
+      ></p-progressBar>
+
+      <h3>Late (16-30)</h3>
+      <p-progressBar
+        [value]="late16_30Probability"
+        [showValue]="true"
+      ></p-progressBar>
+
+      <h3>Issued</h3>
+      <p-progressBar
+        [value]="issuedProbability"
+        [showValue]="true"
+      ></p-progressBar>
+
+      <h3>Default</h3>
+      <p-progressBar
+        [value]="defaultProbability"
+        [showValue]="true"
+      ></p-progressBar>
+
+      <h3>Credit Policy Fully Paid</h3>
+      <p-progressBar
+        [value]="creditPolicyFullyPaidProbability"
+        [showValue]="true"
+      ></p-progressBar>
+
+      <h3>Credit Policy Charged Off</h3>
+      <p-progressBar
+        [value]="creditPolicyChargedOffProbability"
+        [showValue]="true"
+      ></p-progressBar>
     </div>
     <br />
 
@@ -43,14 +89,12 @@
       <h4>{{ score }}</h4>
       <p>
         Score Interpretation:<br />
-        300-499: High Risk Profile. Difficulties in obtaining credit or less
-        favorable conditions.<br />
-        500-649: Moderate Risk Profile. Eligible for credit, but with possible
+        Less than 649: High Risk Profile. Difficulties in obtaining credit or
+        less favorable conditions.<br />
+        650 - 699: Moderate Risk Profile. Eligible for credit, but with possible
         restrictions or higher rates.<br />
-        650-799: Low Risk Profile. Good credit history and low risk. High
-        probability of approval with good conditions.<br />
-        800-850: No Risk Profile. Very solid credit history and very low risk
-        level. Very favorable credit conditions.
+        700 - 750: Low Risk Profile. Good credit history and low risk. High
+        probability of approval with good conditions.
       </p>
     </div>
   </div>

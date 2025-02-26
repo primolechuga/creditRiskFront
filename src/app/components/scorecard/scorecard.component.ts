@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { LoanService } from '../../services/loan-service/loan.service'; // Importa el servicio LoanService
+import { LoanService } from '../../services/loan-service/loan.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './scorecard.component.html',
   styleUrls: ['./scorecard.component.scss'],
 })
-export class ScoreCardComponent implements OnInit {
+export class ScoreCardComponent implements OnInit, OnDestroy {
   pieChartData = {
     labels: ['Current', 'Fully Paid', 'Failure', 'Defaulter', 'Issued'],
     datasets: [
@@ -31,35 +31,68 @@ export class ScoreCardComponent implements OnInit {
     },
   };
 
-  failure: number = 0;
-  current: number = 0;
-  paid: number = 0;
-  defaulter: number = 0;
-  issued: number = 0;
+  // Variables para las probabilidades (en porcentaje)
+  currentProbability: number = 0;
+  fullyPaidProbability: number = 0;
+  chargedOffProbability: number = 0;
+  late31_120Probability: number = 0;
+  inGracePeriodProbability: number = 0;
+  late16_30Probability: number = 0;
+  issuedProbability: number = 0;
+  defaultProbability: number = 0;
+  creditPolicyFullyPaidProbability: number = 0;
+  creditPolicyChargedOffProbability: number = 0;
+
+  // Variables adicionales del backend
   score: number = 0;
+  riskCategory: string = '';
+  mostLikelyClass: string = '';
 
   private subscriptions: Subscription[] = [];
 
   constructor(private loanService: LoanService) {}
 
   ngOnInit(): void {
+    // Suscribirse a las probabilidades individuales (multiplicamos por 100 para mostrar porcentajes)
     this.subscriptions.push(
-      this.loanService.pagados$.subscribe(
-        (data) => (this.paid = data * 100 || 0)
+      this.loanService.probabilityCurrent$.subscribe((data) => {
+        this.currentProbability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityFullyPaid$.subscribe((data) => {
+        this.fullyPaidProbability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityChargedOff$.subscribe((data) => {
+        this.chargedOffProbability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityLate31_120$.subscribe((data) => {
+        this.late31_120Probability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityInGracePeriod$.subscribe((data) => {
+        this.inGracePeriodProbability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityLate16_30$.subscribe((data) => {
+        this.late16_30Probability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityIssued$.subscribe((data) => {
+        this.issuedProbability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityDefault$.subscribe((data) => {
+        this.defaultProbability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityCreditPolicyFullyPaid$.subscribe((data) => {
+        this.creditPolicyFullyPaidProbability = (data || 0) * 100;
+      }),
+      this.loanService.probabilityCreditPolicyChargedOff$.subscribe((data) => {
+        this.creditPolicyChargedOffProbability = (data || 0) * 100;
+      }),
+      // Suscripciones adicionales para score, risk category y most likely class
+      this.loanService.score$.subscribe((data) => (this.score = data || 0)),
+      this.loanService.riskCategory$.subscribe(
+        (data) => (this.riskCategory = data || '')
       ),
-      this.loanService.activos$.subscribe(
-        (data) => (this.current = data * 100 || 0)
-      ),
-      this.loanService.incumplidos$.subscribe(
-        (data) => (this.failure = data * 100 || 0)
-      ),
-      this.loanService.morosos$.subscribe(
-        (data) => (this.defaulter = data * 100 || 0)
-      ),
-      this.loanService.emitidos$.subscribe(
-        (data) => (this.issued = data * 100 || 0)
-      ),
-      this.loanService.score$.subscribe((data) => (this.score = data || 0))
+      this.loanService.mostLikelyClass$.subscribe(
+        (data) => (this.mostLikelyClass = data || '')
+      )
     );
   }
 
